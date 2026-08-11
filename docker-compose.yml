@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: devmatch-postgres-dev
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-devmatch_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password_dev_123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-devmatch_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - devmatch-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: devmatch-backend-dev
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8080:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_password_dev_123}@postgres:5432/${POSTGRES_DB:-devmatch_db}
+      - ENV=development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - devmatch-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    container_name: devmatch-frontend-dev
+    ports:
+      - "3080:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NODE_ENV=development
+    depends_on:
+      - backend
+    networks:
+      - devmatch-network
+
+volumes:
+  postgres_data:
+    name: devmatch_postgres_data_dev
+
+networks:
+  devmatch-network:
+    name: devmatch_network_dev
+    driver: bridge
