@@ -3,9 +3,9 @@ services:
     image: postgres:16-alpine
     container_name: devmatch-postgres-dev
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-devmatch_db}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password_dev_123}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -30,8 +30,9 @@ services:
     ports:
       - "8080:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_password_dev_123}@postgres:5432/${POSTGRES_DB:-devmatch_db}
+      - DATABASE_URL=${DATABASE_URL}
       - ENV=development
+
     depends_on:
       postgres:
         condition: service_healthy

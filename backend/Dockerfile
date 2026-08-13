@@ -21,8 +21,11 @@ RUN pip install --no-cache-dir --upgrade pip && \
 FROM base AS development
 ENV ENV=development
 ENV PYTHONUNBUFFERED=1
+# Install development/test dependencies
+RUN pip install --no-cache-dir ".[dev]"
 # Run dev server with reload
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
 
 # Production stage
 FROM base AS production
