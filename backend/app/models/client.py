@@ -32,7 +32,7 @@ class Client(Base):
 
     # Relationships
     projects: Mapped[list["Project"]] = relationship(
-        "Project", back_populates="client", cascade="all, delete-orphan"
+        "Project", back_populates="client"
     )
     calls: Mapped[list["Call"]] = relationship(
         "Call", back_populates="client"
@@ -41,8 +41,8 @@ class Client(Base):
         "Appointment", back_populates="client"
     )
     ai_interactions: Mapped[list["AIInteraction"]] = relationship(
-        "AIInteraction", back_populates="client", cascade="all, delete-orphan"
+        "AIInteraction", back_populates="client"
     )
     customer_requests: Mapped[list["CustomerRequest"]] = relationship(
-        "CustomerRequest", back_populates="client", cascade="all, delete-orphan"
+        "CustomerRequest", back_populates="client"
     )

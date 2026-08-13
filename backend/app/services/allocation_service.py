@@ -76,6 +76,12 @@ class AllocationService:
                 detail="Client not found"
             )
 
+        if client.status != "active":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Client is inactive"
+            )
+
         # Verify role matching
         if dev.role != client.required_role:
             raise HTTPException(

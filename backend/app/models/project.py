@@ -19,7 +19,7 @@ class Project(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     client_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False
+        UUID(as_uuid=True), ForeignKey("clients.id", ondelete="RESTRICT"), nullable=False
     )
     developer_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("developers.id", ondelete="RESTRICT"), nullable=False
