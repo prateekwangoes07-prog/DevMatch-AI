@@ -9,3 +9,6 @@ class ApprovalStatus(str, enum.Enum):
     PENDING = "PENDING"
     APPROVED = "APPROVED"
     REJECTED = "REJECTED"
+
+class UserRole(str, enum.Enum):
+    ADMIN = "ADMIN"
