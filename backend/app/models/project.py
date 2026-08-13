@@ -13,7 +13,7 @@ class Project(Base):
         UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False
     )
     developer_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("developers.id", ondelete="CASCADE"), nullable=False
+        UUID(as_uuid=True), ForeignKey("developers.id", ondelete="RESTRICT"), nullable=False
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     status: Mapped[str] = mapped_column(String(50), default="active", nullable=False)

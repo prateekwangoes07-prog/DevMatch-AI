@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, Enum, DateTime
+from sqlalchemy import String, Enum, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
@@ -17,6 +17,9 @@ class Developer(Base):
         Enum(DeveloperRole, name="developerrole_enum"),
         nullable=False
     )
+    is_active: Mapped[bool] = mapped_column(
+        Boolean, default=True, nullable=False
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False
     )
@@ -29,5 +32,5 @@ class Developer(Base):
 
     # Relationships
     projects: Mapped[list["Project"]] = relationship(
-        "Project", back_populates="developer", cascade="all, delete-orphan"
+        "Project", back_populates="developer"
     )
