@@ -1,11 +1,20 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, ForeignKey, DateTime
+from sqlalchemy import String, ForeignKey, DateTime, Index
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
 
 class Project(Base):
+    __table_args__ = (
+        Index(
+            "idx_unique_active_project_per_client",
+            "client_id",
+            unique=True,
+            postgresql_where="status = 'active'"
+        ),
+    )
+
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )

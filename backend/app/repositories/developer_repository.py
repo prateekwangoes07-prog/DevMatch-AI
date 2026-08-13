@@ -17,6 +17,15 @@ class DeveloperRepository:
         )
         return result.scalar_one_or_none()
 
+    async def get_by_id_with_lock(self, developer_id: uuid.UUID) -> Developer | None:
+        result = await self.db.execute(
+            select(Developer)
+            .filter(Developer.id == developer_id)
+            .options(selectinload(Developer.projects))
+            .with_for_update()
+        )
+        return result.scalar_one_or_none()
+
     async def get_by_email(self, email: str) -> Developer | None:
         result = await self.db.execute(
             select(Developer).filter(Developer.email == email)

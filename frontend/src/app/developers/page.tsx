@@ -25,6 +25,11 @@ export default function DevelopersPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedDeveloper, setSelectedDeveloper] = useState<Developer | null>(null);
 
+  // Check Availability States
+  const [availabilityRole, setAvailabilityRole] = useState('AI_ML');
+  const [availabilityResults, setAvailabilityResults] = useState<Developer[]>([]);
+  const [checked, setChecked] = useState(false);
+
   // Form Fields
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -163,6 +168,24 @@ export default function DevelopersPage() {
     setShowEditModal(true);
   };
 
+  const handleCheckAvailability = async () => {
+    setChecked(true);
+    const filtered = developers.filter(d => d.role === availabilityRole);
+    setAvailabilityResults(filtered);
+    
+    try {
+      const res = await fetch(`${apiUrl}/developers/available?required_role=${availabilityRole}`, {
+        headers: getHeaders()
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Backend available developers:", data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     router.push('/login');
@@ -199,6 +222,65 @@ export default function DevelopersPage() {
             </button>
           </div>
         </header>
+
+        {/* Check Availability Card */}
+        <div className="p-6 rounded-xl border border-slate-800 bg-slate-950/40 backdrop-blur-md mb-8">
+          <h2 className="text-lg font-bold mb-4 flex items-center space-x-2">
+            <span>Check Developer Availability</span>
+          </h2>
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="w-48">
+              <select
+                value={availabilityRole}
+                onChange={(e) => setAvailabilityRole(e.target.value)}
+                className="w-full px-4 py-2.5 rounded bg-slate-900 border border-slate-800 focus:outline-none focus:border-blue-500 text-white text-sm"
+              >
+                <option value="AI_ML">AI/ML</option>
+                <option value="AUTOMATION">Automation</option>
+                <option value="DEVOPS">DevOps</option>
+              </select>
+            </div>
+            <button
+              onClick={handleCheckAvailability}
+              className="px-5 py-2.5 rounded-lg bg-indigo-650 hover:bg-indigo-600 font-medium text-sm transition duration-200"
+            >
+              Check Availability
+            </button>
+          </div>
+
+          {checked && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {availabilityResults.map((dev) => {
+                const isAvail = dev.is_active && dev.active_project_count < 2;
+                return (
+                  <div key={dev.id} className="p-4 rounded-lg bg-slate-900/60 border border-slate-800 flex justify-between items-center">
+                    <div>
+                      <div className="font-semibold text-white">{dev.name}</div>
+                      <div className="text-xs text-slate-500">{dev.role}</div>
+                      <div className="text-xs text-slate-400 mt-1">Active Clients: {dev.active_project_count} / 2</div>
+                    </div>
+                    <div>
+                      {isAvail ? (
+                        <span className="px-2 py-1 rounded text-xs font-semibold bg-emerald-500/10 text-emerald-400">
+                          🟢 Available
+                        </span>
+                      ) : (
+                        <span className="px-2 py-1 rounded text-xs font-semibold bg-red-500/10 text-red-400">
+                          🔴 Not Available
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              {availabilityResults.length === 0 && (
+                <div className="col-span-full text-center text-sm text-slate-500 py-4">
+                  No developers found for role {availabilityRole}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {error && (
           <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">

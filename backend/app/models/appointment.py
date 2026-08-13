@@ -10,7 +10,7 @@ class Appointment(Base):
         UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
     )
     client_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("clients.id", ondelete="CASCADE"), nullable=False
+        UUID(as_uuid=True), ForeignKey("clients.id", ondelete="RESTRICT"), nullable=False
     )
     appointment_time: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False

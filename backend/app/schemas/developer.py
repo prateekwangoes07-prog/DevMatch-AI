@@ -27,3 +27,17 @@ class DeveloperResponse(DeveloperBase):
 
     class Config:
         from_attributes = True
+
+class DeveloperAllocate(BaseModel):
+    client_id: uuid.UUID
+    project_name: str = Field(..., min_length=1, max_length=255)
+
+class DeveloperAvailableResponse(DeveloperBase):
+    id: uuid.UUID
+    is_active: bool
+    active_project_count: int
+    available: bool = True
+
+    class Config:
+        from_attributes = True
+
