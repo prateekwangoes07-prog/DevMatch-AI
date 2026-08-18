@@ -17,5 +17,11 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    # Cal.com Integration
+    CALCOM_API_KEY: str | None = None
+    CALCOM_BASE_URL: str = "https://api.cal.com/v1"
+    CALCOM_EVENT_TYPE_ID: int | None = None
+
 settings = Settings()
+
 

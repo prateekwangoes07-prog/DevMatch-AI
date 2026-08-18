@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
 
 interface Client {
   id: string;
@@ -186,28 +187,17 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Client Management</h1>
-            <p className="text-slate-400 mt-2">Manage clients, their resource requirements, and status.</p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/developers" className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition">
-              Developers
-            </Link>
-            <Link href="/customer-requests" className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition">
-              Customer Requests
-            </Link>
-            <button
-              onClick={openAddModal}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition font-medium"
-            >
-              Add Client
-            </button>
-          </div>
-        </header>
+    <DashboardLayout title="Clients">
+      <div className="flex flex-col gap-6">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-slate-400">Manage clients, their resource requirements, and status.</p>
+          <button
+            onClick={openAddModal}
+            className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition font-semibold text-sm animate-pulse-subtle"
+          >
+            Add Client
+          </button>
+        </div>
 
         {error && (
           <div className="mb-6 p-4 bg-red-950/50 border border-red-500/50 text-red-200 rounded-lg text-sm">
@@ -460,6 +450,6 @@ export default function ClientsPage() {
           </div>
         </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 }

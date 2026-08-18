@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
 
 interface CustomerRequest {
   id: string;
@@ -221,28 +222,17 @@ export default function CustomerRequestsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Customer Requests</h1>
-            <p className="text-slate-400 mt-2">Approve, reject, or assign recommended developers to customer requests.</p>
-          </div>
-          <div className="flex gap-4">
-            <Link href="/clients" className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition">
-              Clients
-            </Link>
-            <Link href="/developers" className="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition">
-              Developers
-            </Link>
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition font-medium"
-            >
-              New Request
-            </button>
-          </div>
-        </header>
+    <DashboardLayout title="Customer Requests">
+      <div className="flex flex-col gap-6">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-slate-400">Approve, reject, or assign recommended developers to customer requests.</p>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition font-semibold text-sm"
+          >
+            Add Request
+          </button>
+        </div>
 
         {error && (
           <div className="mb-6 p-4 bg-red-950/50 border border-red-500/50 text-red-200 rounded-lg text-sm">
@@ -436,6 +426,6 @@ export default function CustomerRequestsPage() {
           </div>
         </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 }

@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { 
   Cpu, 
   Users, 
@@ -12,13 +14,23 @@ import {
   Database,
   Layers,
   ChevronRight,
-  Smartphone,
   Check,
   AlertCircle
 } from "lucide-react";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("matching");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        router.push("/dashboard");
+      }
+    }
+  }, [router]);
+
 
   return (
     <div className="min-h-screen bg-[#070a13] text-slate-100 flex flex-col selection:bg-brand-500 selection:text-white">
@@ -48,10 +60,10 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
               API Ready
             </span>
-            <button className="bg-brand-600 hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-500/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2">
+            <Link href="/dashboard" className="bg-brand-600 hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-500/30 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2">
               Launch Dashboard
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
       </header>

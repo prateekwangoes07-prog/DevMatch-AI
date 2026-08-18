@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import DashboardLayout from '@/components/DashboardLayout';
 
 interface Developer {
   id: string;
@@ -192,36 +193,19 @@ export default function DevelopersPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0b0f19] text-white p-8 relative overflow-hidden">
-      {/* Glow Effects */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-blue-500/5 blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-indigo-500/5 blur-[120px]" />
-
-      <div className="max-w-6xl mx-auto z-10 relative">
-        <header className="flex justify-between items-center mb-10 pb-6 border-b border-slate-800">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">
-              Developer Management
-            </h1>
-            <p className="text-sm text-slate-400">
-              Manage IT company engineers and roles
-            </p>
-          </div>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 font-medium text-sm transition duration-200"
-            >
-              Add Developer
-            </button>
-            <button
-              onClick={logout}
-              className="px-5 py-2.5 rounded-lg bg-slate-900 border border-slate-800 hover:bg-slate-800 font-medium text-sm transition duration-200"
-            >
-              Log Out
-            </button>
-          </div>
-        </header>
+    <DashboardLayout title="Developers">
+      <div className="flex flex-col gap-6">
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-slate-400">
+            Manage IT company engineers and roles
+          </p>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-sm transition duration-200"
+          >
+            Add Developer
+          </button>
+        </div>
 
         {/* Check Availability Card */}
         <div className="p-6 rounded-xl border border-slate-800 bg-slate-950/40 backdrop-blur-md mb-8">
@@ -511,6 +495,6 @@ export default function DevelopersPage() {
           </div>
         </div>
       )}
-    </main>
+    </DashboardLayout>
   );
 }
